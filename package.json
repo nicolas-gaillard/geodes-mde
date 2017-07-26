@@ -1,0 +1,27 @@
+{
+  "name": "model-transformation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolazg/geodes-mde.git"
+  },
+  "author": "nicolaz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nicolazg/geodes-mde/issues"
+  },
+  "homepage": "https://github.com/nicolazg/geodes-mde#readme",
+  "devDependencies": {
+    "eslint": "^4.3.0",
+    "eslint-config-airbnb-base": "^11.3.1",
+    "eslint-plugin-import": "^2.7.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-eslint": "^4.0.0"
+  }
+}
