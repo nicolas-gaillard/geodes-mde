@@ -4,6 +4,7 @@ const eslint = require('gulp-eslint');
 const inputPaths = {
     javascript: [
         '*.js',
+        'js/*.js',
     ],
 };
 
