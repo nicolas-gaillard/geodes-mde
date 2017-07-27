@@ -32,5 +32,10 @@
         "no-param-reassign": ["error", {
             "props": false
         }]
+    },
+    "globals": {
+        "joint": true,
+        "$": true,
+        "_": true,
     }
 }
