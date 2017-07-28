@@ -23,6 +23,41 @@ const link = new joint.dia.Link({
     target: { id: rect2.id },
 });
 
+const paperSmall = new joint.dia.Paper({
+    el:       $('#outline'),
+    width:    400,
+    height:   167,
+    model:    graph,
+    gridSize: 1,
+});
+
+rect.attr({
+    rect: {
+        fill:           '#2C3E50',
+        rx:             5,
+        ry:             5,
+        'stroke-width': 2,
+        stroke:         'black',
+    },
+    text: {
+        text:             'my label',
+        fill:             '#3498DB',
+        'font-size':      18,
+        'font-weight':    'bold',
+        'font-variant':   'small-caps',
+        'text-transform': 'capitalize',
+    },
+});
+
+link.set('smooth', true);
+
 rect2.translate(300);
 
 graph.addCells([rect, rect2, link]);
+
+paperSmall.scale(0.3);
+paperSmall.$el.css('pointer-events', 'none');
+
+rect.on('change:position', function (element) {
+    console.log(element.id, ':', element.get('position'));
+});
