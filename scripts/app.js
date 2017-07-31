@@ -1,3 +1,27 @@
+// const utils = require('./utils');
+
+$(window).on('load', function(filename, data) {
+    const json = JSON.stringify(data, null, 4);
+    const blob = new Blob([json], { type: 'application/json' });
+    const jsonUrl = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.download = filename;
+    a.href = jsonUrl;
+    a.id = 'download-link';
+
+    console.log(a.id);
+    console.log(document.getElementById('buttons'));
+    // a.textContent = '<i class="material-icons">file_download</i>';
+
+    const i = document.createElement('i');
+    i.className = 'material-icons';
+    i.textContent = 'file_download';
+
+    document.getElementById('buttons').appendChild(a);
+    document.getElementById('download-link').appendChild(i);
+});
+
 const graph = new joint.dia.Graph();
 
 const paper = new joint.dia.Paper({
