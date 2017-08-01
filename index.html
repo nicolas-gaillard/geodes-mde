@@ -6,33 +6,30 @@
 
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">    
+    <link rel="stylesheet" href="styles/style.css" />
     <link rel="stylesheet" href="lib/joint.min.css" />
+
     <script src="lib/jquery.js"></script>
     <script src="lib/lodash.js"></script>
     <script src="lib/backbone.js"></script>
     <script src="lib/joint.min.js"></script>
 
     <style>
-    	#holder, #outline {
-    		border: 1px solid black;
-    	}
-
-    	#outline {
-    		margin-top: 10px;
-    	}
+    	
     </style>
 
   </head>
   <body>
     <h1>Model transformation editor</h1>
 
-    <i class="material-icons">file_download</i><i class="material-icons">file_download</i>
-
     <div id="buttons">
     	<p>Load a JSON model</p>
     </div>
 
     <div id="holder"></div>
+
+    <button id="add-rect">Add Rectangle</button>
+
     <div id="outline"></div>
 
     <script type="text/javascript" src="scripts/app.js"></script>

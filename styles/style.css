@@ -1,0 +1,17 @@
+#holder, #outline {
+	border: 1px solid black;
+}
+
+#outline {
+	margin-top: 10px;
+}
+
+#add-rect {
+  color: #FFFFFF;
+  background-color: grey;
+  border-radius: 3px;
+  border: 0;
+  padding: 10px 20px;
+  margin: 5px 0;
+  cursor: pointer;
+}

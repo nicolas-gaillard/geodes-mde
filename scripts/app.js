@@ -1,25 +1,31 @@
 // const utils = require('./utils');
 
-$(window).on('load', function(filename, data) {
-    const json = JSON.stringify(data, null, 4);
+$(window).on('load', function () {
+    const json = JSON.stringify(graph.toJSON(), null, 4);
     const blob = new Blob([json], { type: 'application/json' });
     const jsonUrl = URL.createObjectURL(blob);
 
     const a = document.createElement('a');
-    a.download = filename;
+    const i = document.createElement('i');
+
+    a.download = 'data.json';
     a.href = jsonUrl;
     a.id = 'download-link';
+    a.title = 'Download the JSON model';
 
-    console.log(a.id);
-    console.log(document.getElementById('buttons'));
-    // a.textContent = '<i class="material-icons">file_download</i>';
-
-    const i = document.createElement('i');
     i.className = 'material-icons';
     i.textContent = 'file_download';
 
     document.getElementById('buttons').appendChild(a);
     document.getElementById('download-link').appendChild(i);
+});
+
+$('#holder').on('DOMSubtreeModified', function () {
+    const json = JSON.stringify(graph.toJSON(), null, 4);
+    const blob = new Blob([json], { type: 'application/json' });
+    const jsonUrl = URL.createObjectURL(blob);
+
+    $('#download-link').attr('href', jsonUrl);
 });
 
 const graph = new joint.dia.Graph();
@@ -85,3 +91,13 @@ paperSmall.$el.css('pointer-events', 'none');
 rect.on('change:position', function (element) {
     console.log(element.id, ':', element.get('position'));
 });
+
+const addRect = function () {
+    const newRect = rect.clone();
+    newRect.translate(+60, +40);
+    newRect.attr('text/text', 'MyRect');
+    graph.addCells(newRect);
+    console.log(graph.toJSON());
+};
+
+$('#add-rect').on('click', addRect);
