@@ -1,5 +1,3 @@
-// const utils = require('./utils');
-
 const graph = new joint.dia.Graph();
 
 const paper = new joint.dia.Paper({
@@ -74,6 +72,10 @@ const addRect = function () {
 
 $('#add-rect').on('click', addRect);
 
+// jQuery :
+// --------
+
+// Link to download the model in JSON
 $(window).on('load', function () {
     const json = JSON.stringify(graph.toJSON(), null, 4);
     const blob = new Blob([json], { type: 'application/json' });
@@ -94,6 +96,7 @@ $(window).on('load', function () {
     document.getElementById('download-link').appendChild(i);
 });
 
+// Update the JSON file when the DOM is modified
 $('#holder').on('DOMSubtreeModified', function () {
     const json = JSON.stringify(graph.toJSON(), null, 4);
     const blob = new Blob([json], { type: 'application/json' });
@@ -101,3 +104,7 @@ $('#holder').on('DOMSubtreeModified', function () {
 
     $('#download-link').attr('href', jsonUrl);
 });
+
+// Events :
+// --------
+
