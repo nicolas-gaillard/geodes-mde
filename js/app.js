@@ -8,6 +8,17 @@ const paper = new joint.dia.Paper({
     gridSize: 1,
 });
 
+const svgZoom = svgPanZoom('#holder svg', {
+    center:               false,
+    zoomEnabled:          true,
+    panEnabled:           true,
+    controlIconsEnabled:  true,
+    fit:                  false,
+    minZoom:              0.5,
+    maxZoom:              2,
+    zoomScaleSensitivity: 0.5,
+});
+
 const rect = new joint.shapes.basic.Rect({
     position: { x: 100, y: 30 },
     size:     { width: 100, height: 30 },
