@@ -30,18 +30,17 @@ const paperSmall = new joint.dia.Paper({
 });
 
 // Zoom
-/*
+
 const svgZoom = svgPanZoom('#holder svg', {
     center:               false,
     zoomEnabled:          true,
-    panEnabled:           true,
+    panEnabled:           false, // was true
     controlIconsEnabled:  true,
     fit:                  false,
     minZoom:              0.5,
     maxZoom:              2,
     zoomScaleSensitivity: 0.5,
 });
-*/
 
 // Basic rectangle
 const rect = new joint.shapes.basic.Rect({
@@ -92,7 +91,7 @@ graph.addCells([rect, rect2, link]);
 stencilGraph.addCells([rect3]);
 
 // Define the outline
-paperSmall.scale(0.3);
+paperSmall.scale(0.2);
 paperSmall.$el.css('pointer-events', 'none');
 
 // Test event
