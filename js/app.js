@@ -2,11 +2,14 @@
 const graph = new joint.dia.Graph();
 
 const paper = new joint.dia.Paper({
-    el:       $('#holder'),
-    width:    1200,
-    height:   500,
-    model:    graph,
-    gridSize: 1,
+    el:         $('#holder'),
+    width:      1200,
+    height:     500,
+    model:      graph,
+    gridSize:   1,
+    background: {
+        color: '#F6F6F6',
+    },
 });
 
 // Canvas from which you take shapes
@@ -17,7 +20,7 @@ const stencilPaper = new joint.dia.Paper({
     height:      60,
     width:       1200,
     model:       stencilGraph,
-    interactive: false,
+    interactive: { labelMove: true }, // was false
 });
 
 // Outline
@@ -30,7 +33,6 @@ const paperSmall = new joint.dia.Paper({
 });
 
 // Zoom
-
 const svgZoom = svgPanZoom('#holder svg', {
     center:               false,
     zoomEnabled:          true,
