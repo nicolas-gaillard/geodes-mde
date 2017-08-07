@@ -6,7 +6,8 @@ const paper = new joint.dia.Paper({
     width:      1200,
     height:     500,
     model:      graph,
-    gridSize:   1,
+    gridSize:   5,
+    drawGrid:   true,
     background: {
         color: '#F6F6F6',
     },
@@ -131,10 +132,13 @@ $(window).on('load', function () {
     a.title = 'Download the JSON model';
 
     i.className = 'material-icons';
-    i.textContent = 'file_download';
+    i.textContent = 'save'; // file_download
 
     document.getElementById('buttons').appendChild(a);
     document.getElementById('download-link').appendChild(i);
+
+    // <i class="material-icons">clear</i> --> graph.clear();
+    // <i class="material-icons">fiber_new</i>
 });
 
 // Update the JSON file when the DOM is modified
