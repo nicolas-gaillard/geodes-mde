@@ -8,13 +8,17 @@
     rel="stylesheet">    
     <link rel="stylesheet" href="styles/style.css" />
     <link rel="stylesheet" href="styles/joint.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
 </head>
 <body>
-    <h1>Model transformation editor</h1>
-
-    <div id="buttons">
-        <p>Load a JSON model</p>
-    </div>
+    <header>
+        <h1>Model transformation editor</h1>
+        <div id="buttons">
+            <a class="waves-effect waves-light btn">button</a>
+        </div>
+    </header>
 
     <div id="stencil" class="window"></div>
 
@@ -23,6 +27,8 @@
     <button id="add-rect">Add Rectangle</button>
 
     <div id="outline" class="window"></div>
+
+    <footer class="footer-distributed"></footer>
 
     <script src="lib/jquery.js"></script>
     <script src="lib/lodash.js"></script>

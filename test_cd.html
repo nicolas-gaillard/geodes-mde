@@ -127,9 +127,17 @@
                 graph.addCell(new fragment.Trace({
                     source: { id: cellView.model.id }, target: { id: elementBelow.id },
                 }));
-            // Move the element a bit to the side.
-            cellView.model.translate(-200, 0);
-        }
+                // Move the element a bit to the side.
+                cellView.model.translate(-200, 0);
+            }
+
+            if (elementBelow instanceof fragment.Source && cellView.model instanceof cd.Class) {
+                elementBelow.attributes.sourceReferences += `Class : ${cellView.model.attributes.name}`;
+                // Loop on class attributes
+                elementBelow.updateRectangles();
+                elementBelow.trigger('fragment-update');
+                cellView.model.translate(-200, 0);
+            }
 
             // Class --- Class
             if (elementBelow instanceof cd.Class && cellView.model instanceof cd.Class) {
