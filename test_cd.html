@@ -132,7 +132,8 @@
             }
 
             if (elementBelow instanceof fragment.Source && cellView.model instanceof cd.Class) {
-                elementBelow.attributes.sourceReferences += `Class : ${cellView.model.attributes.name}`;
+                console.log(elementBelow.attributes);
+                elementBelow.attributes.sourceReferences.push(`Class : ${cellView.model.attributes.name}`);
                 // Loop on class attributes
                 elementBelow.updateRectangles();
                 elementBelow.trigger('fragment-update');
