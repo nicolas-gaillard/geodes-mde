@@ -150,6 +150,22 @@ $('#holder').on('DOMSubtreeModified', function () {
     $('#download-link').attr('href', jsonUrl);
 });
 
+// Responsive 
+// $(window).on('resize', function () {
+//     paper.setDimensions($('#holder').width());
+//     paper.scaleContentToFit({
+//         minScaleX: 0.3,
+//         minScaleY: 0.3,
+//         maxScaleX: 1,
+//         maxScaleY: 1,
+//     });
+// });
+
+// $(window).resize(function () {
+//     const canvas = $('#holder');
+//     paper.setDimensions(canvas.width());
+// });
+
 // --------
 // Events :
 // --------

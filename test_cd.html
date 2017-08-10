@@ -11,8 +11,8 @@
     <script src="lib/backbone.js"></script>
     <script src="lib/joint.min.js"></script>
     <script src="lib/joint.shapes.tm.js"></script>
-    <script src="lib/joint.shapes.cd.js"></script>
     <script src="lib/joint.shapes.fragment.js"></script>
+    <script src="lib/joint.shapes.cd.js"></script>
     <script src="lib/jquery-confirm.min.js"></script>
 
 </head>
@@ -83,10 +83,65 @@
                 position: { x:700  , y: 400 },
                 size: { width: 180, height: 50 },
                 name: 'MyFS',
-            })
+            }),
+
+            // test2: new cd.Class({
+            //     position: { x:450  , y: 500 },
+            //     size: { width: 100, height: 80 },
+            //     name: 'test2',
+            // }),
         };
 
         _.each(classes, function(c) { graph.addCell(c); });
+
+        var r1 = new joint.shapes.basic.Rect({
+            position: { x: 300, y: 20 },
+            size: { width: 200, height: 200 },
+            attrs: { rect: { fill: '#E74C3C' }, text: { text: 'Parent' } }
+        });
+        var r2 = new joint.shapes.basic.Rect({
+            position: { x: 300, y: 30 },
+            size: { width: 200, height: 15 },
+            attrs: { rect: { fill: '#F1C40F' }, text: { text: 'Child' } }
+        });
+
+        var test1 = new cd.Class({
+                position: { x:900  , y: 10 },
+                size: { width: 200, height: 100 },
+                name: 'test1',
+        });
+
+        var yo = new cd.Attribute({
+            position: { x: 900, y: 500 },
+            size: { width: 200, height: 20 },
+            name: 'toto',
+            type: 'tata',
+        });
+        // var yo = new cd.Attribute({
+        //     position: { x: 900, y: 500 },
+        //     attrs: { text: { text: 'MyAttribute' } }
+        // });
+
+        var r3 = new joint.shapes.basic.Rect({
+            position: { x: 900, y: 90 },
+            size: { width: 200, height: 15 },
+            attrs: { rect: { fill: '#FF7D4D' }, text: { text: 'Child' } }
+        });
+
+        test1.embed(r3);
+        r1.embed(r2);
+
+        r2.attr({rect:{style:{'pointer-events':'none'}, stoke:'none'}});
+        r2.attr({text:{style:{'pointer-events':'none'}}});
+        r3.attr({rect:{style:{'pointer-events':'none'}}});
+        r3.attr({text:{style:{'pointer-events':'none'}}});
+
+        graph.addCells([r1, r2, test1, r3, yo]);
+        
+        // See embed elements
+        console.log(graph.toJSON());
+
+        // element.attr({rect:{style:{'pointer-events':'none'}}});
 
         var relations = [
         new cd.Reference({ 
@@ -131,6 +186,7 @@
                 cellView.model.translate(-200, 0);
             }
 
+            // Class -- Source Fragment
             if (elementBelow instanceof fragment.Source && cellView.model instanceof cd.Class) {
                 console.log(elementBelow.attributes);
                 elementBelow.attributes.sourceReferences.push(`Class : ${cellView.model.attributes.name}`);
@@ -138,6 +194,7 @@
                 elementBelow.updateRectangles();
                 elementBelow.trigger('fragment-update');
                 cellView.model.translate(-200, 0);
+                // à tester : cell.set('position', cell.previous('position'));
             }
 
             // Class --- Class

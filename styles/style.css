@@ -6,6 +6,10 @@ body {
 	margin-top: 10px;
 }
 
+#holder {
+    overflow: hidden;
+}
+
 #add-rect {
   color: #FFFFFF;
   background-color: grey;
