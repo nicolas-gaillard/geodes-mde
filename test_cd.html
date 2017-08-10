@@ -112,15 +112,11 @@
         });
 
         var yo = new cd.Attribute({
-            position: { x: 900, y: 500 },
+            position: { x: 900, y: 90 },
             size: { width: 200, height: 20 },
             name: 'toto',
             type: 'tata',
         });
-        // var yo = new cd.Attribute({
-        //     position: { x: 900, y: 500 },
-        //     attrs: { text: { text: 'MyAttribute' } }
-        // });
 
         var r3 = new joint.shapes.basic.Rect({
             position: { x: 900, y: 90 },
@@ -128,7 +124,7 @@
             attrs: { rect: { fill: '#FF7D4D' }, text: { text: 'Child' } }
         });
 
-        test1.embed(r3);
+        test1.embed(yo);
         r1.embed(r2);
 
         r2.attr({rect:{style:{'pointer-events':'none'}, stoke:'none'}});
@@ -136,7 +132,7 @@
         r3.attr({rect:{style:{'pointer-events':'none'}}});
         r3.attr({text:{style:{'pointer-events':'none'}}});
 
-        graph.addCells([r1, r2, test1, r3, yo]);
+        graph.addCells([r1, r2, test1, yo]);
         
         // See embed elements
         console.log(graph.toJSON());
