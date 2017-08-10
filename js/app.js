@@ -117,8 +117,8 @@ $('#add-rect').on('click', addRect);
 // jQuery :
 // --------
 
-// Link to download the model in JSON
 $(window).on('load', function () {
+    // Link to download the model in JSON
     const json = JSON.stringify(graph.toJSON(), null, 4);
     const blob = new Blob([json], { type: 'application/json' });
     const jsonUrl = URL.createObjectURL(blob);
@@ -134,11 +134,23 @@ $(window).on('load', function () {
     i.className = 'material-icons';
     i.textContent = 'save'; // file_download
 
+    // Button to clear the graph
     document.getElementById('buttons').appendChild(a);
     document.getElementById('download-link').appendChild(i);
 
-    // <i class="material-icons">clear</i> --> graph.clear();
-    // <i class="material-icons">fiber_new</i>
+    const divClear = document.createElement('div');
+    const iClear = document.createElement('i');
+    divClear.id = 'clear-div';
+    divClear.className = 'buttons-div';
+    iClear.className = 'material-icons';
+    iClear.textContent = 'clear';
+
+    document.getElementById('buttons').appendChild(divClear);
+    document.getElementById('clear-div').appendChild(iClear);
+
+    document.getElementById('clear-div').onclick = function () {
+        graph.clear();
+    };
 });
 
 // Update the JSON file when the DOM is modified
