@@ -40,3 +40,11 @@ i {
     font-size: 4rem; }
   i.large {
     font-size: 6rem; }
+
+.material-icons {
+  color:#666666;
+}
+
+.buttons {
+  display: inline-block;
+}

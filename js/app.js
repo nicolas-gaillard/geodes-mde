@@ -130,22 +130,23 @@ $(window).on('load', function () {
     a.href = jsonUrl;
     a.id = 'download-link';
     a.title = 'Download the JSON model';
+    a.className = 'buttons';
 
-    i.className = 'material-icons';
+    i.className = 'material-icons medium';
     i.textContent = 'save'; // file_download
 
     // Button to clear the graph
-    document.getElementById('buttons').appendChild(a);
+    document.getElementById('buttons-container').appendChild(a);
     document.getElementById('download-link').appendChild(i);
 
     const divClear = document.createElement('div');
     const iClear = document.createElement('i');
     divClear.id = 'clear-div';
-    divClear.className = 'buttons-div';
-    iClear.className = 'material-icons';
+    divClear.className = 'buttons';
+    iClear.className = 'material-icons medium';
     iClear.textContent = 'clear';
 
-    document.getElementById('buttons').appendChild(divClear);
+    document.getElementById('buttons-container').appendChild(divClear);
     document.getElementById('clear-div').appendChild(iClear);
 
     document.getElementById('clear-div').onclick = function () {
