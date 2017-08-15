@@ -2,6 +2,28 @@ header, footer {
     width: 100%;
 }
 
+header {
+    overflow:auto;
+}
+
+.footer-title {
+    float:left;
+    overflow: auto;
+    display: inline-flex;
+}
+
+.geodes-logo {
+    width: 9%;
+    height: auto;
+    float:left;
+    margin-right: 2em;
+}
+
+
+#buttons-container {
+    float:right;
+}
+
 body {
     font-family: Helvetica;
 }
