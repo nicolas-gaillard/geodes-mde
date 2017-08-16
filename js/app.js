@@ -1,9 +1,12 @@
+// ---------
 // Constants
+// ---------
 const SHAPE_NB     = 6;
 const PAPER_WIDTH  = $('#holder').width();
-const PAPER_HEIGHT = 600
+const PAPER_HEIGHT = 600;
 
 // Canvas where sape are dropped
+// -----------------------------
 const graph = new joint.dia.Graph();
 
 const paper = new joint.dia.Paper({
@@ -18,9 +21,10 @@ const paper = new joint.dia.Paper({
     },
 });
 
-$('#holder svg').attr('id', 'paper-holder');
+$('#holder svg').attr('id', 'paper-holder'); // Set idea to the SVG
 
 // Canvas from which you take shapes
+// ---------------------------------
 const stencilGraph = new joint.dia.Graph();
 
 const stencilPaper = new joint.dia.Paper({
@@ -44,6 +48,7 @@ const stencilPaper = new joint.dia.Paper({
 // });
 
 // Zoom
+// ----
 const svgZoom = svgPanZoom('#holder svg', {
     center:               false,
     zoomEnabled:          true,
@@ -55,10 +60,14 @@ const svgZoom = svgPanZoom('#holder svg', {
     zoomScaleSensitivity: 0.5,
 });
 
+// --------------
+// Stencil shapes 
+// --------------
+
+// Namespaces
 const cd       = joint.shapes.cd;
 const fragment = joint.shapes.fragment;
 
-// Stencil shapes :
 const classShape = new cd.Class({
     position: {
         x: (PAPER_WIDTH / SHAPE_NB),
@@ -109,6 +118,7 @@ const trFragShape = new fragment.Target({
 
 stencilGraph.addCells([classShape, absClassShape, srcFragShape, trFragShape]);
 
+// ----------------
 // Separations line
 // ----------------
 for (let i = 1; i < 3; i += 1) {
@@ -135,7 +145,8 @@ for (let i = 1; i < 3; i += 1) {
 // jQuery :
 // --------
 
-// Buttons :
+// Buttons
+// -------
 $(window).on('load', function () {
     // Link to download the model in JSON
     const json = JSON.stringify(graph.toJSON(), null, 4);
@@ -173,7 +184,8 @@ $(window).on('load', function () {
     };
 });
 
-// Update the JSON file when the DOM is modified
+// Update the JSON file when the DOM is modified (dirty)
+// ---------------------------------------------
 $('#holder').on('DOMSubtreeModified', function () {
     const json = JSON.stringify(graph.toJSON(), null, 4);
     const blob = new Blob([json], { type: 'application/json' });
@@ -202,6 +214,7 @@ $('#holder').on('DOMSubtreeModified', function () {
 // Events :
 // --------
 
+// Drag and drop between stencil and editor
 stencilPaper.on('cell:pointerdown', function (cellView, e, x, y) {
     $('body').append(
         `<div id="flyPaper"
@@ -256,6 +269,7 @@ stencilPaper.on('cell:pointerdown', function (cellView, e, x, y) {
     });
 });
 
+// Drag and drop between elements
 paper.on('cell:pointerup', function (cellView, evt, x, y) {
     // Find the first element below that is not a link nor the dragged element 
     // itself.
