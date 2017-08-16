@@ -49,22 +49,26 @@ header h1 {
     cursor: pointer;
 }
 
-/* ------ */
-/* EDITOR */
-/* ------ */
+/* ----- */
+/* TOOLS */
+/* ----- */
 
-.element-tools {
+.element-tool-remove {
     display:none;
     cursor: pointer;
 }
 
-.joint-type-cd-class:hover .element-tools {
+.joint-type-cd-class:hover .element-tool-remove {
     display: inline;
 }
 
-#outline, #holder {
-    /*margin-top: 10px;*/
+.joint-type-cd-abstract:hover .element-tool-remove {
+    display: inline;
 }
+
+/* ------ */
+/* EDITOR */
+/* ------ */
 
 #holder {
     overflow: hidden;

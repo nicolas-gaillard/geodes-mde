@@ -226,8 +226,107 @@ stencilPaper.on('cell:pointerdown', function (cellView, e, x, y) {
             s.position(x - target.left - offset.x, y - target.top - offset.y);
             graph.addCell(s);
         }
+
         $('body').off('mousemove.fly').off('mouseup.fly');
         flyShape.remove();
         $('#flyPaper').remove();
     });
+});
+
+paper.on('cell:pointerup', function (cellView, evt, x, y) {
+    // Find the first element below that is not a link nor the dragged element 
+    // itself.
+    const elementBelow = graph.get('cells').find(function (cell) {
+        // Not interested in links.
+        if (cell instanceof joint.dia.Link) return false;
+        // The same element as the dropped one. 
+        if (cell.id === cellView.model.id) return false;
+        if (cell.getBBox().containsPoint(g.point(x, y))) {
+            return true;
+        }
+        return false;
+    });
+
+    // If the two elements are connected already, don't
+    // connect them again (this is application specific though).
+    if (elementBelow && !_.contains(graph.getNeighbors(elementBelow),
+        cellView.model)) {
+        // Source fragment --- Target fragment
+        if (elementBelow instanceof fragment.Target &&
+            cellView.model instanceof fragment.Source) {
+            graph.addCell(new fragment.Trace({
+                source: { id: cellView.model.id },
+                target: { id: elementBelow.id },
+            }));
+            // Move the element a bit to the side.
+            cellView.model.translate(-200, 0);
+        }
+
+        // Class -- Source Fragment
+        if (elementBelow instanceof fragment.Source &&
+            cellView.model instanceof cd.Class) {
+            console.log(elementBelow.attributes);
+            elementBelow.attributes.sourceReferences.push(
+                `Class : ${cellView.model.attributes.name}`
+            );
+            // Loop on class attributes
+            elementBelow.updateRectangles();
+            elementBelow.trigger('fragment-update');
+            cellView.model.translate(-200, 0);
+            // à tester : cell.set('position', cell.previous('position'));
+        }
+
+        // Class --- Class
+        if (elementBelow instanceof cd.Class &&
+            cellView.model instanceof cd.Class) {
+            $.confirm({
+                title:             'Confirm',
+                content:           'Which link do you want to draw?',
+                useBootstrap:      false,
+                type:              'dark',
+                closeIcon:         true,
+                boxWidth:          '20%',
+                animation:         'top',
+                backgroundDismiss: true,
+                buttons:           {
+                    reference: {
+                        text:     'Reference',
+                        btnClass: 'btn-dark',
+                        keys:     ['enter', 'r'],
+                        action() {
+                            graph.addCell(new cd.Reference({
+                                source: {
+                                    id: cellView.model.id,
+                                },
+                                target: {
+                                    id: elementBelow.id,
+                                },
+                                lowerBound: '0',
+                                upperBound: '*',
+                            }));
+                            cellView.model.translate(-200, 0);
+                        },
+                    },
+                    composition: {
+                        text:     'Composition',
+                        btnClass: 'btn-dark',
+                        keys:     ['shift', 'c'],
+                        action() {
+                            graph.addCell(new cd.Composition({
+                                source: {
+                                    id: cellView.model.id,
+                                },
+                                target: {
+                                    id: elementBelow.id,
+                                },
+                                lowerBound: '0',
+                                upperBound: '*',
+                            }));
+                            cellView.model.translate(-200, 0);
+                        },
+                    },
+                },
+            });
+        }
+    }
 });
