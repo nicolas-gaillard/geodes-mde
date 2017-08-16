@@ -45,9 +45,22 @@ header h1 {
     float:right;
 }
 
+#clear-div {
+    cursor: pointer;
+}
+
 /* ------ */
 /* EDITOR */
 /* ------ */
+
+.element-tools {
+    display:none;
+    cursor: pointer;
+}
+
+.joint-type-cd-class:hover .element-tools {
+    display: inline;
+}
 
 #outline, #holder {
     /*margin-top: 10px;*/
