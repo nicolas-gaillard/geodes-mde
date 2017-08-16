@@ -1,12 +1,15 @@
-const SHAPE_NB = 6;
+// Constants
+const SHAPE_NB     = 6;
+const PAPER_WIDTH  = $('#holder').width();
+const PAPER_HEIGHT = 600
 
 // Canvas where sape are dropped
 const graph = new joint.dia.Graph();
 
 const paper = new joint.dia.Paper({
     el:         $('#holder'),
-    width:      $('#holder').width(),
-    height:     600,
+    width:      PAPER_WIDTH,
+    height:     PAPER_HEIGHT,
     model:      graph,
     gridSize:   5,
     drawGrid:   false,
@@ -14,6 +17,8 @@ const paper = new joint.dia.Paper({
         color: '#F6F6F6',
     },
 });
+
+$('#holder svg').attr('id', 'paper-holder');
 
 // Canvas from which you take shapes
 const stencilGraph = new joint.dia.Graph();
@@ -56,7 +61,7 @@ const fragment = joint.shapes.fragment;
 // Stencil shapes :
 const classShape = new cd.Class({
     position: {
-        x: ($('#holder').width() / SHAPE_NB),
+        x: (PAPER_WIDTH / SHAPE_NB),
         y: 20,
     },
     size: {
@@ -68,7 +73,7 @@ const classShape = new cd.Class({
 
 const absClassShape = new cd.Abstract({
     position: {
-        x: ($('#holder').width() / SHAPE_NB) * 2,
+        x: (PAPER_WIDTH / SHAPE_NB) * 2,
         y: 20,
     },
     size: {
@@ -80,7 +85,7 @@ const absClassShape = new cd.Abstract({
 
 const srcFragShape = new fragment.Source({
     position: {
-        x: ($('#holder').width() / SHAPE_NB) * 3,
+        x: (PAPER_WIDTH / SHAPE_NB) * 3,
         y: 20,
     },
     size: {
@@ -92,7 +97,7 @@ const srcFragShape = new fragment.Source({
 
 const trFragShape = new fragment.Target({
     position: {
-        x: ($('#holder').width() / SHAPE_NB) * 4,
+        x: (PAPER_WIDTH / SHAPE_NB) * 4,
         y: 20,
     },
     size: {
@@ -103,6 +108,24 @@ const trFragShape = new fragment.Target({
 });
 
 stencilGraph.addCells([classShape, absClassShape, srcFragShape, trFragShape]);
+
+// Separations line
+// ----------------
+for (let i = 1; i < 3; i += 1) {
+    const newLine = document.createElementNS('http://www.w3.org/2000/svg',
+        'line');
+    const x = (PAPER_WIDTH / 3) * i;
+    newLine.setAttribute('x1', x);
+    newLine.setAttribute('x2', x);
+    newLine.setAttribute('y1', 0);
+    newLine.setAttribute('y2', PAPER_HEIGHT);
+    newLine.style.stroke = '#292c2f';
+    newLine.style.strokeWidth = '4px';
+    newLine.style.strokeLinecap = 'round';
+    newLine.style.strokeDasharray = '5, 15';
+
+    document.getElementById('paper-holder').appendChild(newLine);
+}
 
 // Define the outline
 // paperSmall.scale(0.2);
@@ -161,7 +184,7 @@ $('#holder').on('DOMSubtreeModified', function () {
 
 // Responsive 
 // $(window).on('resize', function () {
-//     paper.setDimensions($('#holder').width());
+//     paper.setDimensions(PAPER_WIDTH);
 //     paper.scaleContentToFit({
 //         minScaleX: 0.3,
 //         minScaleY: 0.3,
