@@ -53,7 +53,7 @@ header h1 {
 /* TOOLS */
 /* ----- */
 
-.element-tool-remove {
+.element-tool-remove, .element-tool-new-attr {
     display:none;
     cursor: pointer;
 }
@@ -63,6 +63,14 @@ header h1 {
 }
 
 .joint-type-cd-abstract:hover .element-tool-remove {
+    display: inline;
+}
+
+.joint-type-cd-class:hover .element-tool-new-attr {
+    display: inline;
+}
+
+.joint-type-cd-abstract:hover .element-tool-new-attr {
     display: inline;
 }
 
