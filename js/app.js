@@ -3,7 +3,7 @@
 // ---------
 const SHAPE_NB     = 6;
 const PAPER_WIDTH  = $('#holder').width();
-const PAPER_HEIGHT = 600;
+const PAPER_HEIGHT = 650;
 
 // Canvas where sape are dropped
 // -----------------------------
@@ -117,6 +117,22 @@ const trFragShape = new fragment.Target({
 });
 
 stencilGraph.addCells([classShape, absClassShape, srcFragShape, trFragShape]);
+
+// const test = new fragment.Source({
+//     position: {
+//         x: 100,
+//         y: 100,
+//     },
+//     size: {
+//         width:  200,
+//         height: 100,
+//     },
+//     name: 'Test',
+// });
+
+// graph.addCell(test);
+// test.addReference();
+// test.addReference();
 
 // ----------------
 // Separations line
@@ -317,20 +333,41 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
         if (elementBelow instanceof cd.Class &&
             cellView.model instanceof cd.Class) {
             $.confirm({
-                title:             'Confirm',
-                content:           'Which link do you want to draw?',
+                title:             'Which link do you want to draw?',
                 useBootstrap:      false,
                 type:              'dark',
                 closeIcon:         true,
-                boxWidth:          '20%',
+                boxWidth:          '25%',
                 animation:         'top',
                 backgroundDismiss: true,
-                buttons:           {
+                content:           '' +
+                '<form action="" class="formName">' +
+                '<label>Warning : cardinality -1 means *</label>' +
+                '<div class="form-group">' +
+                '<input id="lb-input" type="number" min="-1" value="0"' +
+                'class="lb form-control" placeholder="Lower bound">' +
+                '<input id="ub-input" type="number" min="-1" value="-1"' +
+                'class="ub form-control" placeholder="Upper bound">' +
+                '</div>' +
+                '</form>',
+
+                buttons: {
                     reference: {
                         text:     'Reference',
                         btnClass: 'btn-dark',
                         keys:     ['enter', 'r'],
                         action() {
+                            let lb = this.$content.find('.lb').val();
+                            let ub = this.$content.find('.ub').val();
+
+                            if (lb === '-1') {
+                                lb = '*';
+                            }
+
+                            if (ub === '-1') {
+                                ub = '*';
+                            }
+
                             graph.addCell(new cd.Reference({
                                 source: {
                                     id: cellView.model.id,
@@ -338,8 +375,8 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
                                 target: {
                                     id: elementBelow.id,
                                 },
-                                lowerBound: '0',
-                                upperBound: '*',
+                                lowerBound: lb,
+                                upperBound: ub,
                             }));
                             cellView.model.translate(-200, 0);
                         },
@@ -349,6 +386,17 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
                         btnClass: 'btn-dark',
                         keys:     ['shift', 'c'],
                         action() {
+                            let lb = this.$content.find('.lb').val();
+                            let ub = this.$content.find('.ub').val();
+
+                            if (lb === '-1') {
+                                lb = '*';
+                            }
+
+                            if (ub === '-1') {
+                                ub = '*';
+                            }
+
                             graph.addCell(new cd.Composition({
                                 source: {
                                     id: cellView.model.id,
@@ -356,14 +404,74 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
                                 target: {
                                     id: elementBelow.id,
                                 },
-                                lowerBound: '0',
-                                upperBound: '*',
+                                lowerBound: lb,
+                                upperBound: ub,
                             }));
                             cellView.model.translate(-200, 0);
                         },
                     },
                 },
+                onContentReady() {
+                    // bind to events
+                    const jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        // if the user submits the form by pressing enter
+                        // in the field.
+                        e.preventDefault();
+                        // reference the button and click it
+                        jc.$$formSubmit.trigger('click');
+                    });
+                },
             });
+
+            // $.confirm({
+            //     title:             'Confirm',
+            //     content:           'Which link do you want to draw?',
+            //     useBootstrap:      false,
+            //     type:              'dark',
+            //     closeIcon:         true,
+            //     boxWidth:          '20%',
+            //     animation:         'top',
+            //     backgroundDismiss: true,
+            //     buttons:           {
+            //         reference: {
+            //             text:     'Reference',
+            //             btnClass: 'btn-dark',
+            //             keys:     ['enter', 'r'],
+            //             action() {
+            //                 graph.addCell(new cd.Reference({
+            //                     source: {
+            //                         id: cellView.model.id,
+            //                     },
+            //                     target: {
+            //                         id: elementBelow.id,
+            //                     },
+            //                     lowerBound: '0',
+            //                     upperBound: '*',
+            //                 }));
+            //                 cellView.model.translate(-200, 0);
+            //             },
+            //         },
+            //         composition: {
+            //             text:     'Composition',
+            //             btnClass: 'btn-dark',
+            //             keys:     ['shift', 'c'],
+            //             action() {
+            //                 graph.addCell(new cd.Composition({
+            //                     source: {
+            //                         id: cellView.model.id,
+            //                     },
+            //                     target: {
+            //                         id: elementBelow.id,
+            //                     },
+            //                     lowerBound: '0',
+            //                     upperBound: '*',
+            //                 }));
+            //                 cellView.model.translate(-200, 0);
+            //             },
+            //         },
+            //     },
+            // });
         }
     }
 });
