@@ -62,6 +62,14 @@ header h1 {
     display: inline;
 }
 
+.joint-type-fragment-source:hover .element-tool-remove {
+    display: inline;
+}
+
+.joint-type-fragment-target:hover .element-tool-remove {
+    display: inline;
+}
+
 .joint-type-cd-abstract:hover .element-tool-remove {
     display: inline;
 }
