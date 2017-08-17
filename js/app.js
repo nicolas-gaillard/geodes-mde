@@ -318,15 +318,25 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
         // Class -- Source Fragment
         if (elementBelow instanceof fragment.Source &&
             cellView.model instanceof cd.Class) {
-            console.log(elementBelow.attributes);
-            elementBelow.attributes.sourceReferences.push(
-                `Class : ${cellView.model.attributes.name}`
-            );
+            const className = cellView.model.getClassName();
+
             // Loop on class attributes
-            elementBelow.updateRectangles();
-            elementBelow.trigger('fragment-update');
+            const attrRefs = cellView.model.getEmbeddedCells();
+
+            if (!(!Array.isArray(attrRefs) || !attrRefs.length)) {
+                _.each(attrRefs, function (attr) {
+                    elementBelow.addReference(attr.getAttributeName(),
+                        className);
+                });
+            }
+
+            // Add the class
+            elementBelow.addReference(className, 'Class');
+
+            // Then, translate the cell
             cellView.model.translate(-200, 0);
-            // à tester : cell.set('position', cell.previous('position'));
+
+            // try it : cell.set('position', cell.previous('position'));
         }
 
         // Class --- Class
