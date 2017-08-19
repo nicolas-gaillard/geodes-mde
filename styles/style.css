@@ -43,6 +43,7 @@ header h1 {
 
 #buttons-container {
     float:right;
+    margin-right: 1em;
 }
 
 #clear-div {
@@ -80,6 +81,56 @@ header h1 {
 
 .joint-type-cd-abstract:hover .element-tool-new-attr {
     display: inline;
+}
+
+/* Not very pretty but works */
+
+#stencil .joint-type-cd-class:hover .element-tool-remove {
+    display: none;
+}
+
+#stencil .joint-type-fragment-source:hover .element-tool-remove {
+    display: none;
+}
+
+#stencil .joint-type-fragment-target:hover .element-tool-remove {
+    display: none;
+}
+
+#stencil .joint-type-cd-abstract:hover .element-tool-remove {
+    display: none;
+}
+
+#stencil .joint-type-cd-class:hover .element-tool-new-attr {
+    display: none;
+}
+
+#stencil .joint-type-cd-abstract:hover .element-tool-new-attr {
+    display: none;
+}
+
+#flyPaper .joint-type-cd-class:hover .element-tool-remove {
+    display: none;
+}
+
+#flyPaper .joint-type-fragment-source:hover .element-tool-remove {
+    display: none;
+}
+
+#flyPaper .joint-type-fragment-target:hover .element-tool-remove {
+    display: none;
+}
+
+#flyPaper .joint-type-cd-abstract:hover .element-tool-remove {
+    display: none;
+}
+
+#flyPaper .joint-type-cd-class:hover .element-tool-new-attr {
+    display: none;
+}
+
+#flyPaper .joint-type-cd-abstract:hover .element-tool-new-attr {
+    display: none;
 }
 
 /* ------ */

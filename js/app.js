@@ -5,6 +5,10 @@ const SHAPE_NB     = 6;
 const PAPER_WIDTH  = $('#holder').width();
 const PAPER_HEIGHT = 650;
 
+// Namespaces
+const cd           = joint.shapes.cd;
+const fragment     = joint.shapes.fragment;
+
 // Canvas where sape are dropped
 // -----------------------------
 const graph = new joint.dia.Graph();
@@ -18,6 +22,9 @@ const paper = new joint.dia.Paper({
     drawGrid:   false,
     background: {
         color: '#F6F6F6',
+    },
+    interactive(cellView) {
+        return !(cellView.model instanceof cd.Attribute);
     },
 });
 
@@ -63,10 +70,6 @@ const svgZoom = svgPanZoom('#holder svg', {
 // --------------
 // Stencil shapes 
 // --------------
-
-// Namespaces
-const cd       = joint.shapes.cd;
-const fragment = joint.shapes.fragment;
 
 const classShape = new cd.Class({
     position: {
@@ -226,9 +229,147 @@ $('#holder').on('DOMSubtreeModified', function () {
 //     paper.setDimensions(canvas.width());
 // });
 
+// $(document).on('click', '.myclass', function () {
+//         //alert('yayy!');
+// });
+
 // --------
 // Events :
 // --------
+
+// Attribute drag and drop :
+paper.on('cell:pointerdown', function (cellView, e, x, y) {
+    if (cellView.model instanceof cd.Attribute) {
+        $('body').append(
+            `<div id="flyPaper"
+            style="position:fixed;z-index:100;opacity:.7;
+            pointer-event:none;background-color:transparent;">
+            </div>`
+        );
+        const model = cellView.model;
+
+        const flyGraph = new joint.dia.Graph();
+
+        const flyPaper = new joint.dia.Paper({
+            el:          $('#flyPaper'),
+            model:       flyGraph,
+            interactive: false,
+        });
+
+        const flyShape = cellView.model.clone();
+        const pos = cellView.model.position();
+        const offset = {
+            x: x - pos.x,
+            y: y - pos.y,
+        };
+
+        flyShape.position(0, 0);
+        flyGraph.addCell(flyShape);
+        $('#flyPaper').offset({
+            left: e.pageX - offset.x,
+            top:  e.pageY - offset.y,
+        });
+        $('body').on('mousemove.fly', function (event) {
+            $('#flyPaper').offset({
+                left: event.pageX - offset.x,
+                top:  event.pageY - offset.y,
+            });
+        });
+        $('body').on('mouseup.fly', function (event) {
+            const x = event.pageX,
+                y = event.pageY,
+                target = paper.$el.offset();
+
+            const bbox = cellView.getBBox();
+            let inFragment = false;
+
+            _.each(graph.getElements(), function (element) {
+                if (element instanceof fragment.Source) {
+                    const eBbox = element.getBBox();
+                    if (x >= eBbox.x && x <= (eBbox.x + eBbox.width) &&
+                        (y - target.top) >= eBbox.y &&
+                        (y - target.top) <= (eBbox.y + eBbox.height)) {
+                        element.addReference(model.getAttributeName(),
+                            model.getAttributeType());
+                        inFragment = true;
+                    }
+                }
+            });
+
+            if (x >= bbox.x && x <= (bbox.x + bbox.width) &&
+                (y - target.top) >= bbox.y &&
+                (y - target.top) <= (bbox.y + bbox.height)) {
+                $.confirm({
+                    title:             'Modification of the attribute',
+                    useBootstrap:      false,
+                    type:              'red',
+                    closeIcon:         true,
+                    boxWidth:          '25%',
+                    animation:         'top',
+                    backgroundDismiss: true,
+                    content:           '' +
+                    '<form action="" class="formName">' +
+                    '<div class="form-group">' +
+                    '<input type="text" placeholder="Attribute name"' +
+                    'class="name form-control" required>' +
+                    '<input type="text" placeholder="Attribute type"' +
+                    'class="type form-control" required>' +
+                    '</div>' +
+                    '</form>',
+
+                    buttons: {
+                        formSubmit: {
+                            text:     'Submit',
+                            btnClass: 'btn-red',
+                            keys:     ['enter', 'r'],
+                            action() {
+                                const name = this.$content.find('.name').val();
+                                const type = this.$content.find('.type').val();
+                                if (!name || !type) {
+                                    alert('provide valid text');
+                                    return false;
+                                }
+                                // console.log(cellView.model);
+                                model.setAttributeName(name);
+                                model.setAttributeType(type);
+                            },
+                        },
+                        cancel() {
+                            // close
+                        },
+                    },
+                    onContentReady() {
+                        // bind to events
+                        const jc = this;
+                        this.$content.find('form').on('submit', function (e) {
+                            // if the user submits the form by pressing enter
+                            // in the field.
+                            e.preventDefault();
+                            // reference the button and click it
+                            jc.$$formSubmit.trigger('click');
+                        });
+                    },
+                });
+            } else if (x > target.left && x < target.left + paper.$el.width() &&
+                y > target.top && y < target.top + paper.$el.height() &&
+                !inFragment
+            ) { // Dropped over paper ?
+                const parents = cellView.model.getAncestors();
+                cellView.model.remove();
+
+                // Refresh the parent view
+                _.each(parents, function (p) {
+                    p.trigger('cd-update');
+                    p.updateRectangles();
+                });
+            }
+
+            $('body').off('mousemove.fly').off('mouseup.fly');
+            flyShape.remove();
+            $('#flyPaper').remove();
+        });
+    }
+});
 
 // Drag and drop between stencil and editor
 stencilPaper.on('cell:pointerdown', function (cellView, e, x, y) {
