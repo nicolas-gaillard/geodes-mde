@@ -33,8 +33,8 @@ header h1 {
 }
 
 .geodes-logo {
-    width: 9%;
-    height: auto;
+    width: auto;
+    height: 5em;
     float:left;
     margin-right: 2em;
     margin-left: 1em;
@@ -54,7 +54,7 @@ header h1 {
 /* TOOLS */
 /* ----- */
 
-.element-tool-remove, .element-tool-new-attr {
+.element-tool-remove, .element-tool-new-attr, .element-tool-new-name {
     display:none;
     cursor: pointer;
 }
@@ -83,55 +83,64 @@ header h1 {
     display: inline;
 }
 
+.joint-type-cd-class:hover .element-tool-new-name {
+    display: inline;
+}
+
+.joint-type-cd-abstract:hover .element-tool-new-name {
+    display: inline;
+}
+
+.joint-type-fragment-source:hover .element-tool-new-name {
+    display: inline;
+}
+
+.joint-type-fragment-target:hover .element-tool-new-name {
+    display: inline;
+}
+
 /* Not very pretty but works */
 
-#stencil .joint-type-cd-class:hover .element-tool-remove {
+#stencil .joint-type-cd-class:hover .element-tool-remove, #flyPaper .joint-type-cd-class:hover .element-tool-remove {
     display: none;
 }
 
-#stencil .joint-type-fragment-source:hover .element-tool-remove {
+#stencil .joint-type-fragment-source:hover .element-tool-remove, #flyPaper .joint-type-fragment-source:hover .element-tool-remove {
     display: none;
 }
 
-#stencil .joint-type-fragment-target:hover .element-tool-remove {
+#stencil .joint-type-fragment-target:hover .element-tool-remove, #flyPaper .joint-type-fragment-target:hover .element-tool-remove {
     display: none;
 }
 
-#stencil .joint-type-cd-abstract:hover .element-tool-remove {
+#stencil .joint-type-cd-abstract:hover .element-tool-remove, #flyPaper .joint-type-cd-abstract:hover .element-tool-remove {
     display: none;
 }
 
-#stencil .joint-type-cd-class:hover .element-tool-new-attr {
+#stencil .joint-type-cd-class:hover .element-tool-new-attr, #flyPaper .joint-type-cd-class:hover .element-tool-new-attr {
     display: none;
 }
 
-#stencil .joint-type-cd-abstract:hover .element-tool-new-attr {
+#stencil .joint-type-cd-abstract:hover .element-tool-new-attr, #flyPaper .joint-type-cd-abstract:hover .element-tool-new-attr {
     display: none;
 }
 
-#flyPaper .joint-type-cd-class:hover .element-tool-remove {
+#flyPaper .joint-type-cd-class:hover .element-tool-new-name,  #stencil .joint-type-cd-class:hover .element-tool-new-name{
     display: none;
 }
 
-#flyPaper .joint-type-fragment-source:hover .element-tool-remove {
+#stencil .joint-type-fragment-source:hover .element-tool-new-name, #flyPaper .joint-type-fragment-source:hover .element-tool-new-name {
     display: none;
 }
 
-#flyPaper .joint-type-fragment-target:hover .element-tool-remove {
+#stencil .joint-type-fragment-target:hover .element-tool-new-name, #flyPaper .joint-type-fragment-target:hover .element-tool-new-name {
     display: none;
 }
 
-#flyPaper .joint-type-cd-abstract:hover .element-tool-remove {
+#stencil .joint-type-cd-abstract:hover .element-tool-new-name, #flyPaper .joint-type-cd-abstract:hover .element-tool-new-name {
     display: none;
 }
 
-#flyPaper .joint-type-cd-class:hover .element-tool-new-attr {
-    display: none;
-}
-
-#flyPaper .joint-type-cd-abstract:hover .element-tool-new-attr {
-    display: none;
-}
 
 /* ------ */
 /* EDITOR */

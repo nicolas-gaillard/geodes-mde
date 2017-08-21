@@ -24,11 +24,11 @@ const paper = new joint.dia.Paper({
         color: '#F6F6F6',
     },
     interactive(cellView) {
-        return !(cellView.model instanceof cd.Attribute);
+        return (!(cellView.model instanceof cd.Attribute));
     },
 });
 
-$('#holder svg').attr('id', 'paper-holder'); // Set idea to the SVG
+$('#holder svg').attr('id', 'paper-holder'); // Set id to the SVG
 
 // Canvas from which you take shapes
 // ---------------------------------
