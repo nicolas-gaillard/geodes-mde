@@ -1,7 +1,7 @@
 // ---------
 // Constants
 // ---------
-const SHAPE_NB       = 6;
+const SHAPE_NB       = 7;
 const PAPER_WIDTH    = $('#holder').width();
 const PAPER_HEIGHT   = 650;
 const STENCIL_HEIGHT = 150;
@@ -11,6 +11,7 @@ const SHAPE_HEIGHT   = 100;
 
 // Namespaces
 const cd             = joint.shapes.cd;
+const ea             = joint.shapes.ea;
 const embed          = joint.shapes.embed;
 const fragment       = joint.shapes.fragment;
 
@@ -124,9 +125,21 @@ const trFragShape = new fragment.Target({
     name: 'Target Fragment',
 });
 
-stencilGraph.addCells([classShape, absClassShape, srcFragShape, trFragShape]);
+const tableShape = new ea.Table({
+    position: {
+        x: (PAPER_WIDTH / SHAPE_NB) * 5,
+        y: STENCIL_Y,
+    },
+    size: {
+        width:  SHAPE_WIDTH,
+        height: SHAPE_HEIGHT,
+    },
+    name: 'Table',
+});
 
-// const test = new fragment.Source({
+stencilGraph.addCells([classShape, absClassShape, srcFragShape, trFragShape, tableShape]);
+
+// const test = new ea.Table({
 //     position: {
 //         x: 100,
 //         y: 100,
@@ -139,8 +152,7 @@ stencilGraph.addCells([classShape, absClassShape, srcFragShape, trFragShape]);
 // });
 
 // graph.addCell(test);
-// test.addReference();
-// test.addReference();
+// test.addColumn();
 
 // ----------------
 // Separations line

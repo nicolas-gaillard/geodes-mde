@@ -75,11 +75,19 @@ header h1 {
     display: inline;
 }
 
+.joint-type-ea-table:hover .element-tool-remove {
+    display: inline;
+}
+
 .joint-type-cd-class:hover .element-tool-new-attr {
     display: inline;
 }
 
 .joint-type-cd-abstract:hover .element-tool-new-attr {
+    display: inline;
+}
+
+.joint-type-ea-table:hover .element-tool-new-attr {
     display: inline;
 }
 
@@ -96,6 +104,10 @@ header h1 {
 }
 
 .joint-type-fragment-target:hover .element-tool-new-name {
+    display: inline;
+}
+
+.joint-type-ea-table:hover .element-tool-new-name {
     display: inline;
 }
 
@@ -138,6 +150,18 @@ header h1 {
 }
 
 #stencil .joint-type-cd-abstract:hover .element-tool-new-name, #flyPaper .joint-type-cd-abstract:hover .element-tool-new-name {
+    display: none;
+}
+
+#stencil .joint-type-ea-table:hover .element-tool-new-name, #flyPaper .joint-type-ea-table:hover .element-tool-new-name {
+    display: none;
+}
+
+#stencil .joint-type-ea-table:hover .element-tool-new-attr, #flyPaper .joint-type-ea-table:hover .element-tool-new-attr {
+    display: none;
+}
+
+#stencil .joint-type-ea-table:hover .element-tool-remove, #flyPaper .joint-type-ea-table:hover .element-tool-remove {
     display: none;
 }
 
