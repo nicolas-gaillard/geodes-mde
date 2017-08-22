@@ -140,21 +140,6 @@ const tableShape = new ea.Table({
 stencilGraph.addCells([classShape, absClassShape, srcFragShape, trFragShape,
     tableShape]);
 
-// const test = new ea.Table({
-//     position: {
-//         x: 100,
-//         y: 100,
-//     },
-//     size: {
-//         width:  200,
-//         height: 100,
-//     },
-//     name: 'Test',
-// });
-
-// graph.addCell(test);
-// test.addColumn();
-
 // ----------------
 // Separations line
 // ----------------
@@ -269,12 +254,13 @@ const dropIntoFragment = function (cellView, elementBelow) {
     // Add the parent element
     if (cellView.model instanceof cd.Class) {
         elementBelow.addReference(elemName, 'Class');
+        // Then, translate the cell
+        cellView.model.translate(-250, 0);
     } else {
         elementBelow.addReference(elemName, 'Table');
+        // Then, translate the cell
+        cellView.model.translate(+250, 0);
     }
-
-    // Then, translate the cell
-    cellView.model.translate(-250, 0);
 };
 
 // --------
