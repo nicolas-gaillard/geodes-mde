@@ -274,7 +274,7 @@ const dropIntoFragment = function (cellView, elementBelow) {
     }
 
     // Then, translate the cell
-    cellView.model.translate(-200, 0);
+    cellView.model.translate(-250, 0);
 };
 
 // --------
@@ -283,7 +283,8 @@ const dropIntoFragment = function (cellView, elementBelow) {
 
 // Attribute drag and drop :
 paper.on('cell:pointerdown', function (cellView, e, x, y) {
-    if (cellView.model instanceof cd.Attribute) {
+    if (cellView.model instanceof cd.Attribute ||
+        cellView.model instanceof ea.Column) {
         $('body').append(
             `<div id="flyPaper"
             style="position:fixed;z-index:100;opacity:.7;
@@ -328,7 +329,8 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
             let inFragment = false;
 
             _.each(graph.getElements(), function (element) {
-                if (element instanceof fragment.Source) {
+                if (element instanceof fragment.Source ||
+                    element instanceof fragment.Target) {
                     const eBbox = element.getBBox();
                     if (x >= eBbox.x && x <= (eBbox.x + eBbox.width) &&
                         (y - target.top) >= eBbox.y &&
@@ -343,10 +345,20 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
             if (x >= bbox.x && x <= (bbox.x + bbox.width) &&
                 (y - target.top) >= bbox.y &&
                 (y - target.top) <= (bbox.y + bbox.height)) {
+                let elemType,
+                    popupColor;
+                if (cellView.model instanceof cd.Attribute) {
+                    elemType = 'attribute';
+                    popupColor = 'red';
+                } else {
+                    elemType = 'column';
+                    popupColor = 'blue';
+                }
+
                 $.confirm({
-                    title:             'Modification of the attribute',
+                    title:             `Modification of the ${elemType}`,
                     useBootstrap:      false,
-                    type:              'red',
+                    type:              popupColor,
                     closeIcon:         true,
                     boxWidth:          '25%',
                     animation:         'top',
@@ -354,9 +366,9 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                     content:           '' +
                     '<form action="" class="formName">' +
                     '<div class="form-group">' +
-                    '<input type="text" placeholder="Attribute name"' +
+                    '<input type="text" placeholder="new name"' +
                     'class="name form-control" required>' +
-                    '<input type="text" placeholder="Attribute type"' +
+                    '<input type="text" placeholder="new type"' +
                     'class="type form-control" required>' +
                     '</div>' +
                     '</form>',
@@ -364,7 +376,7 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                     buttons: {
                         formSubmit: {
                             text:     'Submit',
-                            btnClass: 'btn-red',
+                            btnClass: `btn-${popupColor}`,
                             keys:     ['enter'],
                             action() {
                                 const name = this.$content.find('.name').val();
@@ -406,7 +418,7 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
 
                 // Refresh the parent view
                 _.each(parents, function (p) {
-                    p.trigger('cd-update');
+                    p.trigger('editor-update');
                     p.updateRectangles();
                 });
             }
@@ -503,13 +515,16 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
             cellView.model.translate(-200, 0);
         }
 
-        // Class -- Source Fragment + Table -- Target Fragment
+        // Class -- Source Fragment
         if ((elementBelow instanceof fragment.Source &&
             cellView.model instanceof cd.Class) ||
             (elementBelow instanceof fragment.Target &&
             cellView.model instanceof ea.Table)) {
             dropIntoFragment(cellView, elementBelow);
         }
+
+        // Table -- Target Fragment
+
 
         // Class --- Class
         if (elementBelow instanceof cd.Class &&
