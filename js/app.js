@@ -1,13 +1,18 @@
 // ---------
 // Constants
 // ---------
-const SHAPE_NB     = 6;
-const PAPER_WIDTH  = $('#holder').width();
-const PAPER_HEIGHT = 650;
+const SHAPE_NB       = 6;
+const PAPER_WIDTH    = $('#holder').width();
+const PAPER_HEIGHT   = 650;
+const STENCIL_HEIGHT = 150;
+const STENCIL_Y      = 20;
+const SHAPE_WIDTH    = 200;
+const SHAPE_HEIGHT   = 100;
 
 // Namespaces
-const cd           = joint.shapes.cd;
-const fragment     = joint.shapes.fragment;
+const cd             = joint.shapes.cd;
+const embed          = joint.shapes.embed;
+const fragment       = joint.shapes.fragment;
 
 // Canvas where sape are dropped
 // -----------------------------
@@ -24,7 +29,7 @@ const paper = new joint.dia.Paper({
         color: '#F6F6F6',
     },
     interactive(cellView) {
-        return (!(cellView.model instanceof cd.Attribute));
+        return (!(cellView.model instanceof embed.Element));
     },
 });
 
@@ -36,7 +41,7 @@ const stencilGraph = new joint.dia.Graph();
 
 const stencilPaper = new joint.dia.Paper({
     el:          $('#stencil'),
-    height:      150,
+    height:      STENCIL_HEIGHT,
     width:       $('#stencil').width(),
     model:       stencilGraph,
     interactive: { labelMove: true }, // was false
@@ -74,11 +79,11 @@ const svgZoom = svgPanZoom('#holder svg', {
 const classShape = new cd.Class({
     position: {
         x: (PAPER_WIDTH / SHAPE_NB),
-        y: 20,
+        y: STENCIL_Y,
     },
     size: {
-        width:  200,
-        height: 100,
+        width:  SHAPE_WIDTH,
+        height: SHAPE_HEIGHT,
     },
     name: 'Class',
 });
@@ -86,11 +91,11 @@ const classShape = new cd.Class({
 const absClassShape = new cd.Abstract({
     position: {
         x: (PAPER_WIDTH / SHAPE_NB) * 2,
-        y: 20,
+        y: STENCIL_Y,
     },
     size: {
-        width:  200,
-        height: 100,
+        width:  SHAPE_WIDTH,
+        height: SHAPE_HEIGHT,
     },
     name: 'Class',
 });
@@ -98,11 +103,11 @@ const absClassShape = new cd.Abstract({
 const srcFragShape = new fragment.Source({
     position: {
         x: (PAPER_WIDTH / SHAPE_NB) * 3,
-        y: 20,
+        y: STENCIL_Y,
     },
     size: {
-        width:  200,
-        height: 100,
+        width:  SHAPE_WIDTH,
+        height: SHAPE_HEIGHT,
     },
     name: 'Source Fragment',
 });
@@ -110,11 +115,11 @@ const srcFragShape = new fragment.Source({
 const trFragShape = new fragment.Target({
     position: {
         x: (PAPER_WIDTH / SHAPE_NB) * 4,
-        y: 20,
+        y: STENCIL_Y,
     },
     size: {
-        width:  200,
-        height: 100,
+        width:  SHAPE_WIDTH,
+        height: SHAPE_HEIGHT,
     },
     name: 'Target Fragment',
 });
@@ -289,8 +294,8 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                     if (x >= eBbox.x && x <= (eBbox.x + eBbox.width) &&
                         (y - target.top) >= eBbox.y &&
                         (y - target.top) <= (eBbox.y + eBbox.height)) {
-                        element.addReference(model.getAttributeName(),
-                            model.getAttributeType());
+                        element.addReference(model.getName(),
+                            model.getType());
                         inFragment = true;
                     }
                 }
@@ -321,17 +326,20 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                         formSubmit: {
                             text:     'Submit',
                             btnClass: 'btn-red',
-                            keys:     ['enter', 'r'],
+                            keys:     ['enter'],
                             action() {
                                 const name = this.$content.find('.name').val();
                                 const type = this.$content.find('.type').val();
-                                if (!name || !type) {
-                                    alert('provide valid text');
-                                    return false;
+                                if (!name && type) {
+                                    model.setType(type);
+                                } else if (name && !type) {
+                                    model.setName(name);
+                                } else if (!name && !type) {
+                                    console.log('no values');
+                                } else {
+                                    model.setName(name);
+                                    model.setType(type);
                                 }
-                                // console.log(cellView.model);
-                                model.setAttributeName(name);
-                                model.setAttributeType(type);
                             },
                         },
                         cancel() {
@@ -466,7 +474,7 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
 
             if (!(!Array.isArray(attrRefs) || !attrRefs.length)) {
                 _.each(attrRefs, function (attr) {
-                    elementBelow.addReference(attr.getAttributeName(),
+                    elementBelow.addReference(attr.getName(),
                         className);
                 });
             }
