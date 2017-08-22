@@ -283,8 +283,13 @@ const dropIntoFragment = function (cellView, elementBelow) {
 
 // Attribute drag and drop :
 paper.on('cell:pointerdown', function (cellView, e, x, y) {
-    if (cellView.model instanceof cd.Attribute ||
-        cellView.model instanceof ea.Column) {
+    const isAttrOrCol = (cellView.model instanceof cd.Attribute ||
+        cellView.model instanceof ea.Column);
+
+    const isReference = (cellView.model instanceof fragment.SourceReference ||
+        cellView.model instanceof fragment.TargetReference);
+
+    if (isAttrOrCol || isReference) {
         $('body').append(
             `<div id="flyPaper"
             style="position:fixed;z-index:100;opacity:.7;
@@ -329,8 +334,9 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
             let inFragment = false;
 
             _.each(graph.getElements(), function (element) {
-                if (element instanceof fragment.Source ||
-                    element instanceof fragment.Target) {
+                if ((element instanceof fragment.Source ||
+                    element instanceof fragment.Target) &&
+                    !(isReference)) {
                     const eBbox = element.getBBox();
                     if (x >= eBbox.x && x <= (eBbox.x + eBbox.width) &&
                         (y - target.top) >= eBbox.y &&
@@ -344,7 +350,7 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
 
             if (x >= bbox.x && x <= (bbox.x + bbox.width) &&
                 (y - target.top) >= bbox.y &&
-                (y - target.top) <= (bbox.y + bbox.height)) {
+                (y - target.top) <= (bbox.y + bbox.height) && (isAttrOrCol)) {
                 let elemType,
                     popupColor;
                 if (cellView.model instanceof cd.Attribute) {
