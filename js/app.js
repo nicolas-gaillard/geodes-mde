@@ -137,7 +137,8 @@ const tableShape = new ea.Table({
     name: 'Table',
 });
 
-stencilGraph.addCells([classShape, absClassShape, srcFragShape, trFragShape, tableShape]);
+stencilGraph.addCells([classShape, absClassShape, srcFragShape, trFragShape,
+    tableShape]);
 
 // const test = new ea.Table({
 //     position: {
@@ -249,6 +250,32 @@ $('#holder').on('DOMSubtreeModified', function () {
 // $(document).on('click', '.myclass', function () {
 //         //alert('yayy!');
 // });
+
+// ----------
+// Function :
+// ----------
+const dropIntoFragment = function (cellView, elementBelow) {
+    const elemName = cellView.model.getName();
+
+    // Loop on embed elements
+    const embedRefs = cellView.model.getEmbeddedCells();
+
+    if (!(!Array.isArray(embedRefs) || !embedRefs.length)) {
+        _.each(embedRefs, function (emb) {
+            elementBelow.addReference(emb.getName(),
+                elemName);
+        });
+    }
+    // Add the parent element
+    if (cellView.model instanceof cd.Class) {
+        elementBelow.addReference(elemName, 'Class');
+    } else {
+        elementBelow.addReference(elemName, 'Table');
+    }
+
+    // Then, translate the cell
+    cellView.model.translate(-200, 0);
+};
 
 // --------
 // Events :
@@ -476,28 +503,12 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
             cellView.model.translate(-200, 0);
         }
 
-        // Class -- Source Fragment
-        if (elementBelow instanceof fragment.Source &&
-            cellView.model instanceof cd.Class) {
-            const className = cellView.model.getName();
-
-            // Loop on class attributes
-            const attrRefs = cellView.model.getEmbeddedCells();
-
-            if (!(!Array.isArray(attrRefs) || !attrRefs.length)) {
-                _.each(attrRefs, function (attr) {
-                    elementBelow.addReference(attr.getName(),
-                        className);
-                });
-            }
-
-            // Add the class
-            elementBelow.addReference(className, 'Class');
-
-            // Then, translate the cell
-            cellView.model.translate(-200, 0);
-
-            // try it : cell.set('position', cell.previous('position'));
+        // Class -- Source Fragment + Table -- Target Fragment
+        if ((elementBelow instanceof fragment.Source &&
+            cellView.model instanceof cd.Class) ||
+            (elementBelow instanceof fragment.Target &&
+            cellView.model instanceof ea.Table)) {
+            dropIntoFragment(cellView, elementBelow);
         }
 
         // Class --- Class
@@ -594,55 +605,6 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
                     });
                 },
             });
-
-            // $.confirm({
-            //     title:             'Confirm',
-            //     content:           'Which link do you want to draw?',
-            //     useBootstrap:      false,
-            //     type:              'dark',
-            //     closeIcon:         true,
-            //     boxWidth:          '20%',
-            //     animation:         'top',
-            //     backgroundDismiss: true,
-            //     buttons:           {
-            //         reference: {
-            //             text:     'Reference',
-            //             btnClass: 'btn-dark',
-            //             keys:     ['enter', 'r'],
-            //             action() {
-            //                 graph.addCell(new cd.Reference({
-            //                     source: {
-            //                         id: cellView.model.id,
-            //                     },
-            //                     target: {
-            //                         id: elementBelow.id,
-            //                     },
-            //                     lowerBound: '0',
-            //                     upperBound: '*',
-            //                 }));
-            //                 cellView.model.translate(-200, 0);
-            //             },
-            //         },
-            //         composition: {
-            //             text:     'Composition',
-            //             btnClass: 'btn-dark',
-            //             keys:     ['shift', 'c'],
-            //             action() {
-            //                 graph.addCell(new cd.Composition({
-            //                     source: {
-            //                         id: cellView.model.id,
-            //                     },
-            //                     target: {
-            //                         id: elementBelow.id,
-            //                     },
-            //                     lowerBound: '0',
-            //                     upperBound: '*',
-            //                 }));
-            //                 cellView.model.translate(-200, 0);
-            //             },
-            //         },
-            //     },
-            // });
         }
     }
 });
