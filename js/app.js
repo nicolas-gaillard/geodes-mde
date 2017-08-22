@@ -467,7 +467,7 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
         // Class -- Source Fragment
         if (elementBelow instanceof fragment.Source &&
             cellView.model instanceof cd.Class) {
-            const className = cellView.model.getClassName();
+            const className = cellView.model.getName();
 
             // Loop on class attributes
             const attrRefs = cellView.model.getEmbeddedCells();
