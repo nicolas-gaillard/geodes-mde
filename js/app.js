@@ -353,15 +353,36 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                 (y - target.top) >= bbox.y &&
                 (y - target.top) <= (bbox.y + bbox.height) && (isAttrOrCol)) {
                 let elemType,
-                    popupColor;
+                    popupColor,
+                    checkBox;
                 if (cellView.model instanceof cd.Attribute) {
                     elemType = 'attribute';
                     popupColor = 'red';
+                    checkBox = '';
                 } else {
-                    const disableCheckBox = isAlreadyAPK(cellView.model);
-                    console.log(disableCheckBox);
+                    let PKCheckBox;
+
+                    if (cellView.model.get('isPK')) {
+                        PKCheckBox = ' checked';
+                    } else if (isAlreadyAPK(cellView.model)) {
+                        PKCheckBox = ' disabled';
+                    } else {
+                        PKCheckBox = '';
+                    }
+
+                    const FKCheckBox = (cellView.model.get('isFK')) ?
+                        ' checked' : '';
                     elemType = 'column';
                     popupColor = 'blue';
+
+                    checkBox = `
+                    <br><br><input type="checkbox" id="pk" name="pk" 
+                    ${PKCheckBox}>
+                    <label for="pk"> Primary key</label> <br>
+                    <input type="checkbox" id="fk" name="fk"
+                    ${FKCheckBox}>
+                    <label for="fk"> Foreign key</label>
+                    `;
                 }
 
                 $.confirm({
@@ -379,6 +400,7 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                     'class="name form-control" required>' +
                     '<input type="text" placeholder="new type"' +
                     'class="type form-control" required>' +
+                    checkBox +
                     '</div>' +
                     '</form>',
 
@@ -399,6 +421,11 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                                 } else {
                                     model.setName(name);
                                     model.setType(type);
+                                }
+
+                                if (elemType === 'column') {
+                                    model.setPK($('#pk').is(':checked'));
+                                    model.setFK($('#fk').is(':checked'));
                                 }
                             },
                         },
