@@ -263,6 +263,21 @@ const dropIntoFragment = function (cellView, elementBelow) {
     }
 };
 
+const isAlreadyAPK = function (model) {
+    let isIt = false;
+
+    const parents = model.getAncestors();
+
+    // Embed elements can only have one parent in this application
+    const children = parents[0].getEmbeddedCells();
+    children.forEach(function (child) {
+        if (child.get('isPK')) {
+            isIt = true;
+        }
+    });
+    return isIt;
+};
+
 // --------
 // Events :
 // --------
@@ -343,6 +358,8 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                     elemType = 'attribute';
                     popupColor = 'red';
                 } else {
+                    const disableCheckBox = isAlreadyAPK(cellView.model);
+                    console.log(disableCheckBox);
                     elemType = 'column';
                     popupColor = 'blue';
                 }
@@ -507,7 +524,7 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
             cellView.model.translate(-200, 0);
         }
 
-        // Class -- Source Fragment
+        // Class -- Source Fragment & Table -- Target Fragment
         if ((elementBelow instanceof fragment.Source &&
             cellView.model instanceof cd.Class) ||
             (elementBelow instanceof fragment.Target &&
@@ -515,8 +532,19 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
             dropIntoFragment(cellView, elementBelow);
         }
 
-        // Table -- Target Fragment
-
+        // Table --- Table
+        if (elementBelow instanceof ea.Table &&
+            cellView.model instanceof ea.Table) {
+            graph.addCell(new ea.Association({
+                source: {
+                    id: cellView.model.id,
+                },
+                target: {
+                    id: elementBelow.id,
+                },
+            }));
+            cellView.model.translate(0, -200);
+        }
 
         // Class --- Class
         if (elementBelow instanceof cd.Class &&
@@ -567,7 +595,7 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
                                 lowerBound: lb,
                                 upperBound: ub,
                             }));
-                            cellView.model.translate(-200, 0);
+                            cellView.model.translate(0, -200);
                         },
                     },
                     composition: {
@@ -596,7 +624,7 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
                                 lowerBound: lb,
                                 upperBound: ub,
                             }));
-                            cellView.model.translate(-200, 0);
+                            cellView.model.translate(0, -200);
                         },
                     },
                 },
