@@ -393,16 +393,16 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                     boxWidth:          '25%',
                     animation:         'top',
                     backgroundDismiss: true,
-                    content:           '' +
-                    '<form action="" class="formName">' +
-                    '<div class="form-group">' +
-                    '<input type="text" placeholder="new name"' +
-                    'class="name form-control" required>' +
-                    '<input type="text" placeholder="new type"' +
-                    'class="type form-control" required>' +
-                    checkBox +
-                    '</div>' +
-                    '</form>',
+                    content:           `
+                    <form action="" class="formName">
+                    <div class="form-group">
+                    <input type="text" placeholder="new name"
+                    class="name form-control" required>
+                    <input type="text" placeholder="new type"
+                    class="type form-control" required>
+                    ${checkBox}
+                    </div>
+                    </form>`,
 
                     buttons: {
                         formSubmit: {
