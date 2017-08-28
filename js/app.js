@@ -248,16 +248,16 @@ const dropIntoFragment = function (cellView, elementBelow) {
     if (!(!Array.isArray(embedRefs) || !embedRefs.length)) {
         _.each(embedRefs, function (emb) {
             elementBelow.addReference(emb.getName(),
-                elemName);
+                elemName, emb.id);
         });
     }
     // Add the parent element
     if (cellView.model instanceof cd.Class) {
-        elementBelow.addReference(elemName, 'Class');
+        elementBelow.addReference(elemName, 'Class', cellView.model.id);
         // Then, translate the cell
         cellView.model.translate(-250, 0);
     } else {
-        elementBelow.addReference(elemName, 'Table');
+        elementBelow.addReference(elemName, 'Table', cellView.model.id);
         // Then, translate the cell
         cellView.model.translate(+250, 0);
     }
@@ -343,7 +343,7 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                         (y - target.top) >= eBbox.y &&
                         (y - target.top) <= (eBbox.y + eBbox.height)) {
                         element.addReference(model.getName(),
-                            model.getType());
+                            model.getType(), model.id);
                         inFragment = true;
                     }
                 }
