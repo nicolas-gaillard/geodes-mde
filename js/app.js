@@ -493,6 +493,28 @@ const isAlreadyAPK = function (model) {
     return isIt;
 };
 
+const removeReferences = function (model) {
+    _.each(graph.getElements(), function (embedElement) {
+        if (embedElement instanceof fragment.TargetReference ||
+            embedElement instanceof fragment.SourceReference) {
+            if (embedElement.get('elemRef') === model.get('id')) {
+                embedElement.remove();
+
+                // Refresh the view
+                const parents = embedElement.getAncestors();
+                _.each(parents, function (p) {
+                    p.trigger('editor-update');
+                    p.updateRectangles();
+                });
+            }
+        }
+    });
+};
+
+// const searchAndRemove = function (model) {
+
+// };
+
 // --------
 // Events :
 // --------
@@ -666,7 +688,7 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
             ) { // Dropped over paper ?
                 const parents = cellView.model.getAncestors();
                 $.confirm({
-                    title: 'Deletion confirmation',
+                    title:             'Deletion confirmation',
                     // content: 'Simple confirm!',
                     useBootstrap:      false,
                     type:              'red',
@@ -674,25 +696,25 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                     boxWidth:          '25%',
                     animation:         'top',
                     backgroundDismiss: true,
-                    buttons: {
+                    buttons:           {
                         confirm: {
-                            text: 'Delete',
+                            text:     'Delete',
                             btnClass: 'btn-red',
-                            keys: ['enter', 'shift'],
-                            action: function(){
+                            keys:     ['enter', 'shift'],
+                            action() {
                                 cellView.model.remove();
-                            }
+                                // Refresh the parent view
+                                _.each(parents, function (p) {
+                                    p.trigger('editor-update');
+                                    p.updateRectangles();
+                                });
+                                removeReferences(cellView.model);
+                            },
                         },
-                        cancel: function () {
-
+                        cancel() {
+                            // close
                         },
-                    }
-                });
-
-                // Refresh the parent view
-                _.each(parents, function (p) {
-                    p.trigger('editor-update');
-                    p.updateRectangles();
+                    },
                 });
             }
 
