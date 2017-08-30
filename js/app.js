@@ -665,7 +665,29 @@ paper.on('cell:pointerdown', function (cellView, e, x, y) {
                 !inFragment
             ) { // Dropped over paper ?
                 const parents = cellView.model.getAncestors();
-                cellView.model.remove();
+                $.confirm({
+                    title: 'Deletion confirmation',
+                    // content: 'Simple confirm!',
+                    useBootstrap:      false,
+                    type:              'red',
+                    closeIcon:         true,
+                    boxWidth:          '25%',
+                    animation:         'top',
+                    backgroundDismiss: true,
+                    buttons: {
+                        confirm: {
+                            text: 'Delete',
+                            btnClass: 'btn-red',
+                            keys: ['enter', 'shift'],
+                            action: function(){
+                                cellView.model.remove();
+                            }
+                        },
+                        cancel: function () {
+
+                        },
+                    }
+                });
 
                 // Refresh the parent view
                 _.each(parents, function (p) {
