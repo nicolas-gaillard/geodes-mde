@@ -498,10 +498,10 @@ const removeReferences = function (model) {
         if (embedElement instanceof fragment.TargetReference ||
             embedElement instanceof fragment.SourceReference) {
             if (embedElement.get('elemRef') === model.get('id')) {
+                const parents = embedElement.getAncestors();
                 embedElement.remove();
 
                 // Refresh the view
-                const parents = embedElement.getAncestors();
                 _.each(parents, function (p) {
                     p.trigger('editor-update');
                     p.updateRectangles();
