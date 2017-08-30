@@ -382,6 +382,13 @@ const jsonFile = function () {
     return JSON.stringify(file, null, 4);
 };
 
+// Load a json file
+// ----------------
+
+const loadJson = function () {
+    return null;
+};
+
 // Buttons
 // -------
 $(window).on('load', function () {
@@ -478,6 +485,25 @@ const dropIntoFragment = function (cellView, elementBelow) {
     }
 };
 
+const cardinalityIntoFragment = function (cellView, elementBelow) {
+    const links = graph.getConnectedLinks(cellView.model);
+    // console.log(links);
+
+    if (!(!Array.isArray(links) || !links.length)) {
+        // Loop on links
+        _.each(links, function (l) {
+            if ((cellView.model.id === l.get('source').id) &&
+                (Number(l.getLowerBound()) >= 1)) {
+                const linkedClass = graph.getCell(l.get('target').id);
+                // Recursion
+                cardinalityIntoFragment(linkedClass.findView(paper),
+                    elementBelow);
+            }
+        });
+    }
+    dropIntoFragment(cellView, elementBelow);
+};
+
 const isAlreadyAPK = function (model) {
     let isIt = false;
 
@@ -511,9 +537,9 @@ const removeReferences = function (model) {
     });
 };
 
-const searchAndRemove = function (model) {
-    removeReferences(model);
-    _.each(model.getEmbeddedCells(), function (embedCell) {
+const searchAndRemove = function (element) {
+    removeReferences(element);
+    _.each(element.getEmbeddedCells(), function (embedCell) {
         removeReferences(embedCell);
     });
 };
@@ -813,12 +839,16 @@ paper.on('cell:pointerup', function (cellView, evt, x, y) {
             cellView.model.translate(-200, 0);
         }
 
-        // Class -- Source Fragment & Table -- Target Fragment
-        if ((elementBelow instanceof fragment.Source &&
-            cellView.model instanceof cd.Class) ||
-            (elementBelow instanceof fragment.Target &&
-            cellView.model instanceof ea.Table)) {
+        // Table -- Target Fragment
+        if (elementBelow instanceof fragment.Target &&
+            cellView.model instanceof ea.Table) {
             dropIntoFragment(cellView, elementBelow);
+        }
+
+        // Class -- Source Fragment
+        if (elementBelow instanceof fragment.Source &&
+            cellView.model instanceof cd.Class) {
+            cardinalityIntoFragment(cellView, elementBelow);
         }
 
         // Table --- Table
