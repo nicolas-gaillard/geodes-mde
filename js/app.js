@@ -511,9 +511,12 @@ const removeReferences = function (model) {
     });
 };
 
-// const searchAndRemove = function (model) {
-
-// };
+const searchAndRemove = function (model) {
+    removeReferences(model);
+    _.each(model.getEmbeddedCells(), function (embedCell) {
+        removeReferences(embedCell);
+    });
+};
 
 // --------
 // Events :
